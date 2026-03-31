@@ -124,6 +124,14 @@ This isn't a Claude Code bug — it's a Git Bash limitation with stdin pipes fro
 - [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI
 - [Node.js](https://nodejs.org/) 18+ (you already have it if you use Claude Code)
 
+## How This Was Made
+
+This tool was built using AI-assisted development (Claude Code) guided by a structured methodology: problem diagnosis through logs first, systematic debugging escalation, and verification-driven development.
+
+The human contribution: identifying the root cause (Git Bash stdin pipe limitation), designing the solution architecture, and validating across environments. The AI contribution: implementation speed and code generation.
+
+AI is the tool. Methodology is the craft.
+
 ## License
 
 MIT - [The Ermite](https://github.com/theermite)
