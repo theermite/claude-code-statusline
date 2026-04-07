@@ -53,7 +53,8 @@ if echo "$INPUT" | grep -q "git commit"; then
 fi
 
 # === RING 1: GIT ADD GUARD ===
-if echo "$INPUT" | grep -qE 'git add \.|git add -A|git add --all'; then
+# Block "git add ." and "git add -A" but allow "git add .claude/..." etc.
+if echo "$INPUT" | grep -qE 'git add (\.|--all|-A)( |"|;|&&|\||\)|$)'; then
   echo "BLOCKED: Use 'git add <specific files>' instead of 'git add .' or 'git add -A'."
   exit 2
 fi
