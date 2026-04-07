@@ -1,0 +1,144 @@
+{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Glob",
+      "Grep",
+      "Agent",
+      "Bash(git:*)",
+      "Bash(npm:*)",
+      "Bash(pnpm:*)",
+      "Bash(pip:*)",
+      "Bash(python:*)",
+      "Bash(pytest:*)",
+      "Bash(docker:*)",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(mkdir:*)",
+      "Bash(cp:*)",
+      "Bash(mv:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(wc:*)",
+      "Bash(echo:*)",
+      "Bash(curl:*)",
+      "Bash(gh:*)"
+    ],
+    "deny": [
+      "Bash(rm -rf:*)",
+      "Bash(sudo rm:*)",
+      "Bash(git push --force:*)",
+      "Bash(git reset --hard:*)",
+      "Bash(git checkout -- :*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/bash-guard.sh",
+            "description": "All Bash guards: secrets, destructive, commits, deploy, migrations, deps"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/write-guard.sh",
+            "description": "All Write/Edit guards: env, JWT, secrets, SHA pin, naming"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/post-write-guard.sh",
+            "description": "All post-write guards: file size, BOM, console.log"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": []
+      }
+    ],
+    "UserPromptSubmit": [],
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "SESSION START — FULL INITIALIZATION.\n\n1. ENVIRONMENT: Detect OS, machine name, working directory, shell.\n2. IDENTIFY: Is this MNK-GoRin (methodology) or a project repo?\n3. If project repo: run /session-start skill.\n4. LOCAL vs VPS: Check hostname.\n5. Windows SSH: use /c/Windows/System32/OpenSSH/ssh.exe\n\n6. OBSIDIAN: If project repo, read 02-Projets/[project-name]/ in Obsidian vault via MCP. Load Notes.md, Bugs.md, Prochaines-Etapes.md, Decisions.md.\n\n7. EICHI: Verify Obsidian MCP is connected. If not, note it — can still read Eichi files directly.\n\n8. REMINDERS:\n- Eichi FIRST for any research\n- Obsidian project notes for project state\n- Run tests to check pre-existing errors\n- Quality is BLOCKING, atomic commits required\n- All text output in French when talking to Jay\n- All files written in English\n- UTF-8 without BOM always",
+            "description": "Ring 1: Full environment detection + Obsidian sync + Eichi check + reminders"
+          }
+        ]
+      },
+      {
+        "matcher": "compact",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "CONTEXT RE-INJECTION after compaction.\n\nCritical context that must persist:\n1. CARDINAL PRINCIPLE: Code is invisible. Goal = impact on lives.\n2. 4 TAKUMI ACCORDS: Impeccable Word, No Assumptions, No Ego, Always Best Effort.\n3. QUALITY = BLOCKING. Zero derogation. TDG always.\n4. EICHI FIRST. Search KB before web. 8 languages (EN, FR, DE, RU, ES, ZH, JA, AR).\n5. OBSIDIAN PROJECT NOTES. Every session, decision, bug = Obsidian 02-Projets/[project]/.\n6. ATOMIC COMMITS. One logical change per commit. Commit = push.\n7. PRE-EXISTING ERRORS: Fix them, never ignore.\n8. NON-TECH AGENTS: BEFORE code (prepare) + AFTER code (validate). Not during.\n9. DEBUG: LOGS FIRST. L3 = report to Jay.\n10. FIX = DEPLOY on live apps.\n11. Talk to Jay in French. Write all files in English. UTF-8 always.\n\nReload project context from Obsidian if available.",
+            "description": "Ring 1: Context re-injection after auto-compaction"
+          }
+        ]
+      },
+      {
+        "matcher": "clear",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "SESSION CLEARED. Full context reload needed:\n1. What project? Check working directory.\n2. Load Obsidian project notes: Read 02-Projets/[project]/ via MCP.\n3. Check git log -5 for recent work.\n4. Run tests to check pre-existing errors.\n5. Remind: Eichi first, Obsidian project notes always, Quality BLOCKING, atomic commits.\n6. Talk to Jay in French. Write files in English. UTF-8 always.",
+            "description": "Ring 1: Full context reload after /clear"
+          }
+        ]
+      },
+      {
+        "matcher": "resume",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "SESSION RESUMED. Reload context:\n1. What project are we in? Check working directory.\n2. What was the last task? Check git log -5.\n3. Are there uncommitted changes? Check git status.\n4. Load Obsidian project notes: Read 02-Projets/[project]/ via MCP (if project repo).\n5. Remind: Eichi first, Obsidian project notes always, Quality BLOCKING, atomic commits.\n6. Talk to Jay in French. Write files in English.",
+            "description": "Ring 1: Session resume context reload"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "SESSION END — MANDATORY CHECKLIST.\n\n1. UNCOMMITTED WORK: Are there uncommitted changes? If yes → /commit now.\n2. DOCS: Were Blueprint/CDC/PET updated if code changed? If not → update now.\n3. OBSIDIAN: Update project notes in Obsidian 02-Projets/[project]/.\n   - Update Prochaines-Etapes.md with pending items\n   - Update Decisions.md with session decisions\n   - Update Bugs.md if new bugs found\n4. SESSION REPORT: Save to docs/Sessions/Session-YYYY-MM-DD.md\n5. SCORING: Score = 100 - (violations x 10) - (warnings x 2)\n\nOutput reminders for any incomplete items. Do NOT let the session end with unfinished business.",
+            "description": "Ring 1: Session end full checklist + Obsidian sync + report"
+          }
+        ]
+      }
+    ],
+    "Stop": [],
+    "PostToolUseFailure": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "DEBUG ESCALATION CHECK. A Bash command just failed.\n\n1. LOGS FIRST: Have the error logs been read? If hypothesizing without logs: 'RULE: LOGS FIRST. Read error output before hypothesizing.'\n2. REPEATED FAILURE: Is this the 2nd+ failure on the same issue? If yes: 'WARNING: Multiple failures. Escalate: L1 (logs) → L2 (Eichi + web 8 languages) → L3 (report to Jay).'\n3. CONTEXT RESET: After 2 failed corrections → suggest /clear or new conversation.",
+            "description": "Ring 1: Debug escalation + logs-first enforcement"
+          }
+        ]
+      }
+    ],
+    "ConfigChange": []
+  }
+}

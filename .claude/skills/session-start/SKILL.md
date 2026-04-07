@@ -18,7 +18,8 @@ Execute these steps IN ORDER. No skipping.
 6. **CDC CHECK**: Verify `docs/CDC.md` exists. Flag any drift from implementation.
 7. **PRE-EXISTING ERRORS**: Run test suite. If ANY test fails, flag as priority.
 8. **VEILLE CHECK**: Verify stack versions via npm/pypi/web. Training data is ALWAYS months stale. One wrong version = cascading failures in code, tests, deploys.
-9. **PLAN**: Present today's plan based on pending items + Jay's request. Wait for validation.
+9. **LEGO AUDIT**: If the project uses UI components, cross-reference project imports against `@shinkofa/ui` inventory in `rules/Quality.md` → "Shinkofa Lego Library" section. Flag any locally-defined components that should be imported from the library, and note any new library components available since last session.
+10. **PLAN**: Present today's plan based on pending items + Jay's request. Wait for validation.
 
 ## Rules
 
