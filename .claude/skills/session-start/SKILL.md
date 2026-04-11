@@ -13,7 +13,7 @@ Execute these steps IN ORDER. No skipping.
 1. **ENVIRONMENT**: Detect OS, machine (local/VPS), paths, shell. Display result.
 2. **RECAP**: Read last 3 session reports from `docs/Sessions/` in project repo. Display summary: work done, decisions, pending items, errors.
 3. **EICHI**: Verify Eichi-Shinkofa KB is accessible (Obsidian MCP or file system).
-4. **OBSIDIAN SYNC**: Read `02-Projets/[project]/` in Obsidian vault via MCP — load project notes.
+4. **OBSIDIAN SYNC**: Read the entire `01-Projets/` folder in Obsidian vault via MCP (flat structure post 2026-04-11). Load meta files (`_Index.md`, `_Marathon-Context.md`, `_Infrastructure.md`, `_Legacy-Index.md`) + every `[project].md` file in parallel. The old nested `02-Projets/[project]/` structure is LEGACY — do not read it.
 5. **BLUEPRINT CHECK**: Verify `docs/Blueprint.md` exists and is current.
 6. **CDC CHECK**: Verify `docs/CDC.md` exists. Flag any drift from implementation.
 7. **PRE-EXISTING ERRORS**: Run test suite. If ANY test fails, flag as priority.

@@ -26,7 +26,7 @@ Phase -> Tasks -> Verification criteria -> Dependencies -> Risks
 - Never give time estimates (focus on what, not when)
 - Identify dependencies between tasks
 - Flag risks with mitigation strategies
-- Save plan in Obsidian 02-Projets/[project]/Decisions.md
+- Save plan in Obsidian 01-Projets/[project].md — section "Décisions" (flat structure post 2026-04-11)
 
 ## General Rules
 - Follow all rules in `.claude/rules/` and the 4 Takumi Accords.

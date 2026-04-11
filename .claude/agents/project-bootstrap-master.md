@@ -22,7 +22,7 @@ Scaffold new projects with correct structure, configuration, and methodology.
 3. Apply Copier template from MNK-GoRin based on project_type
 4. Generate .claude/ with correct agents, skills, hooks
 5. Create docs/ structure (Blueprint, CDC, PET, Sessions, Audits, Bugs, Screenshots)
-6. Create project folder in Obsidian 02-Projets/[project-name]/
+6. Create `01-Projets/[project].md` in Obsidian (flat structure post 2026-04-11, one file per project, sections: Notes, Décisions, Bugs, Prochaines étapes, Connexions) + add entry to `_Index.md`
 7. Initialize git, commit, push
 
 ## Template Types

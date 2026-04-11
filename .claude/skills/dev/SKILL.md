@@ -22,7 +22,7 @@ Execute these steps IN ORDER. No skipping. Atomic commits throughout.
 10. **TESTS**: All tests pass (unit + integration + e2e + anti-regression).
 11. **NON-TECH VALIDATE**: UX, Accessibility, Brand review the result.
 12. **DOCS**: Update Blueprint, CDC, PET to reflect reality.
-13. **OBSIDIAN SYNC**: Update decisions, notes in Obsidian `02-Projets/[project]/`.
+13. **OBSIDIAN SYNC**: Update decisions, notes, bugs, next steps in Obsidian `01-Projets/[project].md` (flat structure post 2026-04-11, one file per project). The old nested `02-Projets/[project]/*.md` is LEGACY — never update there.
 
 ## Rules
 

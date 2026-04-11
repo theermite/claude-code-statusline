@@ -66,4 +66,4 @@ No backup = no migration. This is not a guideline. It is a gate.
 
 - NEVER run ALTER TABLE or DROP without backup
 - NEVER assume migration is backward-compatible — test both directions
-- Log all schema decisions in Obsidian 02-Projets/[project]/Decisions.md
+- Log all schema decisions in Obsidian 01-Projets/[project].md — section "Décisions" (flat structure post 2026-04-11)

@@ -47,5 +47,5 @@ Before ANY hypothesis: READ THE LOGS. Read error output, stack traces, server lo
 - Context Reset: 2 failed corrections -> /clear or new conversation
 - Every fix needs a test. No exception.
 - Pre-existing errors: fix them. The ensemble matters.
-- Log bug in Obsidian 02-Projets/[project]/Bugs.md
+- Log bug in Obsidian 01-Projets/[project].md — section "Bugs" (flat structure post 2026-04-11)
 - NEVER say "it should work" without running the test
