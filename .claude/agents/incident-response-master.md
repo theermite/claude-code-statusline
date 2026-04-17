@@ -23,7 +23,7 @@ Production incident triage, runbooks, escalation. Distinct from Debug (which is 
 3. TRIAGE: Quick fix possible? Or needs investigation?
 4. ACT: Apply fix or escalate to Debug-Investigator
 5. VERIFY: Service restored? Monitoring green?
-6. Document: Incident report in Obsidian 01-Projets/[project].md — section "Notes" (flat structure post 2026-04-11)
+6. Document: Incident report in Obsidian `01-Projets/[project].md` — section "Notes" (flat structure post 2026-04-11)
 
 ## Runbook Template
 - Service: [name]

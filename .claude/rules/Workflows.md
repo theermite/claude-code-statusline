@@ -12,6 +12,7 @@ ENVIRONMENT CHECK → AUDIT → PLAN (wait validation) → TESTS first (TDG) →
 
 ## Behavioral Rules
 
+- **Reformulate before coding (BLOCKING)** — before writing ANY code, reformulate: (1) what you understood, (2) what you will do, (3) what you will NOT touch, (4) which files are impacted. Wait for Jay's validation on non-trivial changes. NEVER jump straight to code. Bug #6: "Takumi code trop vite sans reformuler" — this rule exists to prevent it.
 - **Context inference** — check git history before asking Jay. Never ask what can be deduced.
 - **No circular searching** — recent commits → error message → most likely location.
 - **Context reset** — after 2 failed corrections on same issue → `/clear` or new conversation.
@@ -29,7 +30,7 @@ ENVIRONMENT CHECK → AUDIT → PLAN (wait validation) → TESTS first (TDG) →
 - **Environment awareness** — detect OS, machine (local/VPS), paths, shell at session start.
 - **Atomic commits** — one logical change per commit. Hook-enforced.
 - **Lego Library First (BLOCKING)** — before coding ANY UI element, check `@shinkofa/ui` inventory in `rules/Quality.md` → "Shinkofa Lego Library" section. Hook-enforced: `write-guard.sh` warns on component duplication + hardcoded strings. If it exists: import it. If not: code it in `Shinkofa-Shared/packages/ui/` FIRST (with tests + story), then import. All text via `@shinkofa/i18n` keys (FR/EN/ES). All shared types via `@shinkofa/types`. Coding a duplicate = BLOCKING violation.
-- **Obsidian project notes (BLOCKING)** — at session start, read the **entire** `01-Projets/` folder in Obsidian vault via MCP (flat structure post 2026-04-11). Load in parallel: meta files (`_Index.md`, `_Marathon-Context.md`, `_Infrastructure.md`, `_Legacy-Index.md`) + every `[project].md` file. At session end, update `01-Projets/[project].md` for every project touched (single file per project with sections Notes, Décisions, Bugs, Prochaines étapes, Connexions). Non-negotiable — this is the canonical project memory. The old nested `02-Projets/[project]/{Notes,Bugs,Decisions,Prochaines-Etapes}.md` structure is LEGACY — never create or update files there. If Obsidian MCP is unreachable at session start: STOP and escalate — do not proceed without project memory. Skipping = `-20` session score.
+- **Obsidian project notes (BLOCKING)** — at session start, read the **entire** `01-Projets/` folder in Obsidian vault via MCP (flat structure, post 2026-04-11 — one file per project, plus meta `_Index.md` / `_Marathon-Context.md` / `_Infrastructure.md` / `_Legacy-Index.md`). Load all files in parallel. At session end, update the relevant `01-Projets/[project].md` files with decisions, bugs, next steps, and cross-project connections. The old nested `02-Projets/[project]/{Notes,Bugs,Decisions,Prochaines-Etapes}.md` structure is LEGACY — do not read or write there. Notes are the canonical project memory system. If Obsidian MCP is unreachable at session start: STOP and escalate. Skipping = `-20` session score.
 
 ## Non-Tech Agents: BEFORE and AFTER (NOT During)
 
@@ -80,6 +81,14 @@ Violation of this gate = prohibition #20.
 | Mobile | Touch 44x44px, offline-first, <200KB initial, TTI <3s on 3G |
 | CLI | `--help`, exit codes, JSON output, `--no-color` |
 | Content | Factual, Jay's voice, GDPR-compliant, no raw AI published |
+
+## Pre-RAG Audit (BLOCKING)
+
+Any (re)indexation of a knowledge base toward a RAG must be preceded by `/pre-rag-audit`. CRITICAL findings must be resolved. WARNINGS must be documented. Violation = RAG poisoning = `-10` session score. Run at minimum every 30 days on Eichi-Shinkofa KB.
+
+## Code Registry
+
+Run `/update-registry` after adding, removing, or renaming classes/functions. CI can verify: `git diff --exit-code docs/registry/`. For `@shinkofa/*` packages, registry progressively replaces the manual inventory in `rules/Quality.md`.
 
 ## Fix = Deploy
 

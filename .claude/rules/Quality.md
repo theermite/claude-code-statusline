@@ -176,6 +176,17 @@ Phases 0-9 COMPLETE. Every new platform = assembly of existing bricks + business
 
 Remaining integration work: replace coupled components in The Ermite and Michi-Shinkofa with library imports.
 
+## Static Analysis Stack (BLOCKING)
+
+> Full details: `rules/Static-Analysis.md`. Templates: `templates/static-analysis/`.
+
+**Principle**: One linter is never enough. Each project type gets a standardized multi-tool stack with chiffered thresholds.
+
+**Pre-commit** (fast, <5s): Ruff (Python), Biome (TS), ShellCheck (Bash).
+**CI** (thorough): Pylint, Bandit, Vulture, Radon, mypy, Madge, Knip, Trivy, Semgrep, Gitleaks.
+
+**Zero tolerance (BLOCKING)**: Ruff errors, Biome errors, tsc errors, Bandit HIGH, circular deps, HIGH/CRITICAL CVEs, Gitleaks findings, Semgrep HIGH/CRITICAL.
+
 ## Maintainability (BLOCKING)
 
 - Max 30 lines per function (excluding tests)

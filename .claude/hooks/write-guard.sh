@@ -2,6 +2,9 @@
 # Unified Write|Edit PreToolUse guard — all checks in one script
 # Reduces Claude Code UI noise (1 hook entry instead of 5)
 # Compatible: Git Bash on Windows
+#
+# RECOVERY PRINCIPLE: Every BLOCKED/WARNING message MUST include
+# a concrete recovery action so Takumi knows what to do next.
 
 INPUT=$(cat)
 
@@ -23,7 +26,7 @@ DIRNAME=$(dirname "$FILE_PATH_UNIX")
 case "$FILENAME" in
   .env|.env.local|.env.production|.env.prod)
     if [ ! -f "$DIRNAME/.env.example" ]; then
-      echo "BLOCKED: .env.example must exist alongside $FILENAME. Create it first."
+      echo "BLOCKED: .env.example must exist alongside $FILENAME. RECOVERY: Create $DIRNAME/.env.example with placeholder values (no real secrets), then retry this write." >&2
       exit 2
     fi
     ;;
@@ -31,28 +34,28 @@ esac
 
 # === RING 1: LOCALSTORAGE JWT BLOCK ===
 if echo "$INPUT" | grep -qiE "localStorage\.(set|get)Item.*(token|jwt|auth|session)"; then
-  echo "BLOCKED: JWT tokens must use httpOnly cookies, not localStorage."
+  echo "BLOCKED: JWT tokens must use httpOnly cookies, not localStorage. RECOVERY: Replace localStorage with httpOnly cookie-based auth (set via backend Set-Cookie header). See rules/Security.md for the pattern. Retry after fixing." >&2
   exit 2
 fi
 
 # === RING 1: SECRETS IN FILES ===
 if echo "$INPUT" | grep -qE 'sk_live_[a-zA-Z0-9]{10,}'; then
-  echo "BLOCKED: Stripe live key detected. Use environment variables."
+  echo "BLOCKED: Stripe live key detected in code. RECOVERY: Move the key to .env file, reference via process.env.STRIPE_SECRET_KEY, then retry." >&2
   exit 2
 fi
 if echo "$INPUT" | grep -qE 'ghp_[a-zA-Z0-9]{36}'; then
-  echo "BLOCKED: GitHub token detected. Use environment variables."
+  echo "BLOCKED: GitHub token detected in code. RECOVERY: Move token to .env file, reference via environment variable, then retry." >&2
   exit 2
 fi
 if echo "$INPUT" | grep -qE 'PRIVATE KEY'; then
-  echo "BLOCKED: Private key detected. Use secret management."
+  echo "BLOCKED: Private key detected in code. RECOVERY: Store in .env (gitignored) or secrets manager, load at runtime, then retry." >&2
   exit 2
 fi
 
 # === RING 1: GITHUB ACTIONS SHA PINNING ===
 if echo "$FILE_PATH" | grep -qE '\.github/workflows/.*\.yml$'; then
   if echo "$INPUT" | grep -qE 'uses:.*@(v[0-9]|main|master|latest)'; then
-    echo "BLOCKED: GitHub Actions must be pinned to SHA, not tags."
+    echo "BLOCKED: GitHub Actions must be pinned to SHA, not tags. RECOVERY: Find the full commit SHA for the action version on GitHub, replace the tag with the SHA (e.g., actions/checkout@abc123...), then retry." >&2
     exit 2
   fi
 fi
@@ -65,7 +68,7 @@ case "$FILENAME" in
       CONTENT=$(echo "$INPUT" | sed -n 's/.*"content" *: *"\([^"]*\)".*/\1/p' | head -1)
     fi
     if echo "$CONTENT" | grep -qE '"[a-z@][^"]*"\s*:\s*"[\^~]?[0-9]+\.[0-9]+'; then
-      echo "VEILLE GUARD: Dependency versions in $FILENAME — verify via npm/pypi/web (training data is months stale)."
+      echo "WARNING: Dependency versions in $FILENAME detected. ACTION: Verify versions via npm/pypi/web (training data is months stale). If already verified, continue." >&2
     fi
     ;;
   Dockerfile|Dockerfile.*)
@@ -74,12 +77,12 @@ case "$FILENAME" in
       CONTENT=$(echo "$INPUT" | sed -n 's/.*"content" *: *"\([^"]*\)".*/\1/p' | head -1)
     fi
     if echo "$CONTENT" | grep -qE 'FROM .+:[0-9]+'; then
-      echo "VEILLE GUARD: Docker image version in $FILENAME — verify via Docker Hub (training data is months stale)."
+      echo "WARNING: Docker image version in $FILENAME detected. ACTION: Verify version via Docker Hub (training data is months stale). If already verified, continue." >&2
     fi
     ;;
 esac
 
-# === RING 1: LEGO LIBRARY GUARD (warning only) ===
+# === RING 1: LEGO LIBRARY GUARD (BLOCKING — Bug #2 fix 2026-04-09) ===
 # Detect components that already exist in @shinkofa/ui
 case "$EXTENSION" in
   tsx|jsx)
@@ -95,7 +98,8 @@ case "$EXTENSION" in
       MATCH=$(echo "$CONTENT" | grep -oE "(export )?(function|const) ($LEGO_COMPONENTS)[^a-zA-Z]" | head -1)
       if [ -n "$MATCH" ]; then
         COMP_NAME=$(echo "$MATCH" | grep -oE "($LEGO_COMPONENTS)")
-        echo "LEGO GUARD: '$COMP_NAME' already exists in @shinkofa/ui. Import it instead of redefining. If extending, add a project-specific prefix (e.g., App$COMP_NAME)."
+        echo "BLOCKED: '$COMP_NAME' already exists in @shinkofa/ui. Import from @shinkofa/ui instead of redefining. 48 days were wasted on Shizen because this guard was not blocking. NEVER duplicate a Lego component." >&2
+        exit 2
       fi
     fi
     ;;
@@ -114,11 +118,11 @@ case "$EXTENSION" in
       # Detect hardcoded strings in JSX attributes (title, placeholder, aria-label, alt)
       # Handle both raw quotes and JSON-escaped quotes (\")
       if echo "$I18N_CONTENT" | grep -qE '(title|placeholder|aria-label|alt)=\\?"[A-Z\xC0-\xFF][a-zA-Z\xC0-\xFF ]{3,}\\?"'; then
-        echo "i18n GUARD: Hardcoded user-facing string detected in JSX attribute. Use @shinkofa/i18n keys via the labels prop pattern."
+        echo "WARNING: Hardcoded user-facing string in JSX attribute. ACTION: Replace with @shinkofa/i18n key via labels prop pattern. Add key to FR/EN/ES locale files, use t('namespace:key'). Continue after fixing." >&2
       fi
       # Detect hardcoded text content in JSX tags (>Word word<)
       if echo "$I18N_CONTENT" | grep -qE '>[A-Z\xC0-\xFF][a-zA-Z\xC0-\xFF ]{3,}<'; then
-        echo "i18n GUARD: Hardcoded user-facing text detected in JSX. Use @shinkofa/i18n keys via the labels prop pattern."
+        echo "WARNING: Hardcoded user-facing text in JSX. ACTION: Replace with {t('namespace:key')} from @shinkofa/i18n. Add key to FR/EN/ES locale files. Continue after fixing." >&2
       fi
     fi
     ;;
@@ -133,22 +137,22 @@ case "$FILENAME" in
       case "$EXTENSION" in
         py)
           if ! echo "$NAME" | grep -qE '^[a-z][a-z0-9_]*$'; then
-            echo "WARNING: Python files should use snake_case: $FILENAME"
+            echo "WARNING: Python files should use snake_case: $FILENAME. ACTION: Rename to snake_case and update imports, then retry." >&2
           fi
           ;;
         sh)
           if ! echo "$NAME" | grep -qE '^[a-z][a-z0-9-]*$'; then
-            echo "WARNING: Bash scripts should use kebab-case: $FILENAME"
+            echo "WARNING: Bash scripts should use kebab-case: $FILENAME. ACTION: Rename to kebab-case and update references, then retry." >&2
           fi
           ;;
         ts|js)
           if ! echo "$NAME" | grep -qE '^[a-z][a-zA-Z0-9]*$'; then
-            echo "WARNING: TS/JS utility files should use camelCase: $FILENAME"
+            echo "WARNING: TS/JS utility files should use camelCase: $FILENAME. ACTION: Rename to camelCase and update imports, then retry." >&2
           fi
           ;;
         tsx|jsx)
           if ! echo "$NAME" | grep -qE '^[A-Z][a-zA-Z0-9]*$'; then
-            echo "WARNING: React components should use PascalCase: $FILENAME"
+            echo "WARNING: React components should use PascalCase: $FILENAME. ACTION: Rename to PascalCase and update imports, then retry." >&2
           fi
           ;;
         md)
@@ -157,7 +161,7 @@ case "$FILENAME" in
             agents|skills|hooks) ;; # lowercase-kebab in .claude subdirs
             *)
               if ! echo "$NAME" | grep -qE '^[A-Z][a-zA-Z0-9]*(-[A-Z][a-zA-Z0-9]*)*$'; then
-                echo "WARNING: Markdown docs should use Title-Kebab-Case: $FILENAME"
+                echo "WARNING: Markdown docs should use Title-Kebab-Case: $FILENAME. ACTION: Rename to Title-Kebab-Case (e.g., My-Document.md), then retry." >&2
               fi
               ;;
           esac

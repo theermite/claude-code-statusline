@@ -31,15 +31,21 @@ The next concrete action that serves Layer 2, taking into account current energy
 - **Modularity**: Each tool must work standalone before becoming part of the ecosystem.
 - **Eichi = our brain**: Consult Eichi-Shinkofa KB systematically — it contains the deep knowledge (coaching, neurodiversity, gaming, marketing, vision). Not just for tech.
 
-## Current Priorities (March 2026)
+## D12 — Build For Me First (2026-04-09)
 
-1. **Clean & align existing platforms** — The Ermite, Michi-Shinkofa, Hibiki: audit (quality + visibility + Big 5 content + SEO/GEO + email capture)
-2. **Kakusei alpha** — esport/gaming differentiator. Jay = organizational brain guiding players.
-3. **Complete auto-content pipeline** — extend existing The Ermite pipeline (LinkedIn/Discord/Telegram already working) + finish video pipeline (articles → TikTok/Shorts) + add Dev.to, Hashnode, Reddit, Twitter/X
-4. **Monetize** — discovery calls by invitation. 120€/h coaching, 150€/h consulting. 5h/week = 3K/month.
+Jay develops for himself. Products already on sale stay in maintenance. No new products for others until Jay is satisfied with his own usage. The only products with real users are the ones Jay dogfoods (Hibiki, Niwa). This pivot aligns energy with reality.
+
+**Additional L1 filter**: Does this serve ME first? If not, defer.
+
+## Current Priorities (April 2026)
+
+1. **Koshin = Jay's super assistant** — Priority #1. Multi-LLM hybrid architecture (DeepSeek + Claude API), all MCP connections, Nagare integrated, Takumi migrates into Koshin. Score 58/100 → target 85+.
+2. **Kakusei POC/alpha** — Commitment to Gatito honored. Presentation this weekend. In parallel with Koshin.
+3. **Streaming + auto-content pipelines** — Jay becomes a streamer. Gaming = natural magnetic visibility for a Projector. OBS + Streamer.bot + auto-clips → TikTok/Shorts/YouTube. Extend existing pipelines (LinkedIn/Discord/Telegram) + Dev.to/Hashnode/Reddit/Twitter-X.
+4. **Existing products in maintenance** — Michi-Shinkofa, Michi-Niwa, Hibiki, Shizen: security + bug fixes only. No new features.
 
 ## Existing Visibility Assets
 
 - **Accounts**: Malt, Product Hunt, Indie Hackers, Dev.to, Hashnode, LinkedIn, Reddit, Solo.to (solo.to/theermite)
 - **Pipeline**: The Ermite blog already auto-publishes to LinkedIn, Discord, Telegram
-- **Missing**: video pipeline (TikTok/Shorts), Dev.to/Hashnode/Reddit auto-publish, email capture/nurture
+- **Missing**: streaming setup, video pipeline (TikTok/Shorts), Dev.to/Hashnode/Reddit auto-publish, email capture/nurture

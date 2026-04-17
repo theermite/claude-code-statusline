@@ -19,7 +19,7 @@ Execute these steps IN ORDER. No skipping. Wait for Jay's validation at step 11.
 7. **CDC**: Write `docs/CDC.md` via interactive Q&A with Jay.
 8. **PET**: Write `docs/PET.md` (Plan d'Execution Technique).
 9. **PRESENT**: Generate HTML presentation (standalone file in docs/).
-10. **OBSIDIAN SYNC**: Create project folder in Obsidian `01-Projets/[project].md` (flat structure post 2026-04-11, one file per project) with sections: Notes, Décisions, Bugs, Prochaines étapes, Connexions. Add an entry to `_Index.md`. The old nested `02-Projets/[project]/*.md` structure is LEGACY.
+10. **OBSIDIAN SYNC**: Create `01-Projets/[project].md` in Obsidian (flat structure post 2026-04-11, one file per project) with sections: Notes, Décisions, Bugs, Prochaines étapes, Connexions. Add an entry to `_Index.md`. The old nested `02-Projets/[project]/*.md` structure is LEGACY — never create there.
 11. **VALIDATE**: Wait for Jay's explicit approval before ANY coding.
 
 ## Questionnaire (6 questions for Jay)

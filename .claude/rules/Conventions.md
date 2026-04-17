@@ -34,7 +34,7 @@ type(scope): concise description
 
 Body if needed.
 
-Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
 ```
 
 Types: feat, fix, refactor, docs, chore, test, perf, ci, style
@@ -61,7 +61,7 @@ One logical change per commit. Hook-enforced. If you changed auth AND UI in the 
 | Linting | Biome 2.4+ (TS) / Ruff 0.15+ (Python) | |
 | Testing | Vitest 4.0+ (TS) / pytest (Python) / Playwright (E2E) | |
 | AI local | Ollama + qwen3:8b-nothink | |
-| AI cloud | Claude Opus 4.6 / Sonnet 4.6 / DeepSeek-V3 | |
+| AI cloud | Claude Opus 4.7 / Sonnet 4.6 / Haiku 4.5 / DeepSeek-V3 | |
 
 **Zero Dogma**: This stack is preferred, not mandatory. If a project needs something else, justify and document.
 
