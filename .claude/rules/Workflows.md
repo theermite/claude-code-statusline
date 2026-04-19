@@ -44,6 +44,8 @@ Every time code is written or modified — whether via `/dev`, a simple request,
 - **Detect environment** — OS, machine (local/VPS), paths, shell at session start.
 - **Atomic commits** — one logical change per commit. Hook-enforced.
 - **Lego Library First (BLOCKING)** — before coding ANY UI element, check `@shinkofa/ui` inventory in `rules/Quality.md`. If it exists → import. If not → code in `Shinkofa-Shared/packages/ui/` first (with tests + story), then import. All text via `@shinkofa/i18n` keys (FR/EN/ES). All shared types via `@shinkofa/types`.
+- **Anti-overengineering** — only make changes directly requested or clearly necessary. No extras, no abstractions for one-time ops, no hypothetical futures. Three similar lines > premature abstraction.
+- **ZERO rm -rf on work directories (BLOCKING)** — NEVER `rm -rf` on dist/, build/, output/, data/, or any directory containing work. `rm -rf` bypasses the recycle bin = IRREVERSIBLE LOSS. Always `mv x x-backup` or ask Jay BEFORE deletion.
 - **Sync Obsidian project notes (BLOCKING)** — **3 files, not 21.** At session start: load `_Cross-Project.md` + `_Index.md` + current project file. Additional files on demand only. At session end: write only to files touched by the session (current project + `_Cross-Project.md` if cross-project decisions + `Contenu.md` if visibility candidates). If MCP unreachable: STOP and escalate.
 
 ## Non-Tech Agents: BEFORE and AFTER (NOT During)
@@ -82,8 +84,6 @@ After 2 failed corrections on the same issue → `/clear` or new conversation. D
 | L1 | First attempt | LOGS FIRST. Recent commits → error → most likely location. |
 | L2 | L1 failed | Eichi consult + web research (7 languages). |
 | L3 | L2 failed | **STOP.** Generate detailed report. Return to Jay for brainstorming. |
-
-Context Reset Rule: After 2 failed corrections → `/clear` or new conversation.
 
 ## Post-Block Recovery Protocol (BLOCKING)
 

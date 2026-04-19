@@ -294,14 +294,3 @@ Every Shinkofa project MUST have from day one:
 - [ ] Feedback Widget integrated in main layout (WF-035)
 - [ ] Morphic adaptation: sensory defaults (theme + motion + font size)
 
-## Pre-existing Errors
-
-If tests fail when you start a session, those errors are YOUR responsibility to fix. Never ignore a failing test because "it was already broken." The ensemble matters.
-
-## Backup Cadence
-
-Create a backup (git tag or branch) every 3-4 commits during dev sessions. Non-negotiable. Prevents catastrophic loss from regressions.
-
-## Documentation Sync
-
-Blueprint, CDC, and PET must reflect reality after every dev session. If the code diverges from the docs, the docs are updated — not the other way around.
