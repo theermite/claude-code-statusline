@@ -40,9 +40,10 @@ Jay develops for himself. Products already on sale stay in maintenance. No new p
 ## Current Priorities (April 2026)
 
 1. **Koshin = Jay's super assistant** — Priority #1. Multi-LLM hybrid architecture (DeepSeek + Claude API), all MCP connections, Nagare integrated, Takumi migrates into Koshin. Score 58/100 → target 85+.
-2. **Kakusei POC/alpha** — Commitment to Gatito honored. Presentation this weekend. In parallel with Koshin.
+2. **Kakusei beta** — Commitment to Gatito honored. B1.1 clean, B1.2 auth in backlog. Revenue-critical platform.
 3. **Streaming + auto-content pipelines** — Jay becomes a streamer. Gaming = natural magnetic visibility for a Projector. OBS + Streamer.bot + auto-clips → TikTok/Shorts/YouTube. Extend existing pipelines (LinkedIn/Discord/Telegram) + Dev.to/Hashnode/Reddit/Twitter-X.
-4. **Existing products in maintenance** — Michi-Shinkofa, Michi-Niwa, Hibiki, Shizen: security + bug fixes only. No new features.
+4. **3 revenue-critical platforms** — Kakusei, Shizen, Michi-Shinkofa = magnetic visibility. Security + bug fixes + features that serve magnetic visibility.
+5. **Other products in maintenance** — Michi-Niwa, Hibiki: security + bug fixes only. No new features.
 
 ## Existing Visibility Assets
 

@@ -40,6 +40,23 @@ Write tests BEFORE code. Always. A binary test is the clearest goal for AI.
 - Contract testing with Pact for cross-service APIs
 - AI/LLM outputs: test structure and constraints, not exact content
 
+### Test Reliability Metrics (5 numbers, not 1)
+
+A single coverage % is misleading. Five metrics tell the truth:
+
+| Metric | Target | What it catches |
+|--------|--------|-----------------|
+| Line coverage | ≥ 80% (95% critical paths) | Unexercised code |
+| Empty tests | 0 | Tests without assertions give false confidence |
+| Trivial tests | < 10% of total | `assert x is not None` doesn't verify behavior |
+| Mock:Assert ratio | < 3:1 per test | If mocks > assertions by 3:1, you're testing the mock, not the code |
+| Type coverage (mypy/tsc strict) | 100% new code | Catches type-level bugs statically |
+
+**Detection rules**:
+- A test with zero `assert` or `pytest.raises` = empty test = BLOCKING
+- A test with only identity checks (`is not None`, `isinstance`) = trivial = WARNING
+- A test with > 20 lines for a < 10-line function = probably over-mocked = WARNING
+
 ## Performance (BLOCKING)
 
 ### Core Web Vitals 2026 (Shinkofa targets — stricter than Google "Good")
@@ -83,17 +100,17 @@ Write tests BEFORE code. Always. A binary test is the clearest goal for AI.
 
 > Every reusable element is built in `Shinkofa-Shared/packages/` FIRST, then imported. Never code a reusable component directly in a project. Coding a duplicate of something that exists or belongs in the library = BLOCKING violation.
 
-### @shinkofa/ui — Component Inventory (69 components)
+### @shinkofa/ui — Component Inventory (79 components)
 
 | Category | Components |
 |----------|-----------|
 | **Primitives** (8) | Button, Input, Textarea, Badge, Card, Skeleton, Modal, EmptyState |
 | **Shared Interactive** (6) | ThemeProvider, ThemeToggle, BackToTop, RevealOnScroll, LanguageSwitcher, CookieConsent |
-| **Forms & Input** (4) | TagInput, DictationButton, CollapsibleCard, PromptDialog |
+| **Forms & Input** (5) | TagInput, DictationButton, CollapsibleCard, CollapsibleSection, PromptDialog |
 | **Feedback** (2) | SaveIndicator, ConfirmModal |
 | **Media** (1) | SafeImage |
 | **BodyGraph HD** (4) | BodyGraph, BodyGraphCenter, BodyGraphChannel, BodyGraphLegend |
-| **SEO** (7) | StructuredData, ArticleSchema, BreadcrumbSchema, FAQSchema, ReviewSchema, PortfolioSchema, ServiceSchema |
+| **SEO** (9) | StructuredData, ArticleSchema, BreadcrumbSchema, FAQSchema, ReviewSchema, PortfolioSchema, PortfolioItemSchema, PortfolioListSchema, ServiceSchema |
 | **Planner** (14) | EnergySlider, DayScore, KiGauge, KiBudgetGauges, KiCheckIn, SportTracker, MealTracker, TaskCard, SleepTracker + 5 sub-components |
 | **Dashboard** (7) | KiBudgetMini, SleepSummaryCard, EnergyTrendChart, EnergyPixelMap, TodayTasksList, QuickActionGrid, ProfileChipBar |
 | **Toast** (2) | ToastProvider, Toast |
@@ -101,6 +118,8 @@ Write tests BEFORE code. Always. A binary test is the clearest goal for AI.
 | **Navigation** (3) | NavShell, NavLink, NavGroup |
 | **Settings** (3) | SettingsSection, RevealToggle, PasswordChangeForm |
 | **Avatar** (2) | AvatarUpload, AvatarCropModal |
+| **Questionnaire** (8) | QuestionRenderer, ProgressTracker, LoadingStepper, PhaseCard, LikertOptions, SingleChoice, MultiChoice, OpenText |
+| **Gaming** (4) | DodgeMaster, SkillshotTrainer, MultiTask, ImagePairs |
 
 All components: tested (324+ tests), themed (5 themes), accessible (WCAG 2.2 AA), framework-agnostic.
 
@@ -156,7 +175,7 @@ const { formatDate } = useFormattedDate();    // Intl.DateTimeFormat
 const { formatCurrency } = useFormattedCurrency(); // Intl.NumberFormat (EUR default)
 ```
 
-**Hook-enforced**: `write-guard.sh` warns on hardcoded user-facing strings in `.tsx/.jsx` files.
+**Hook-enforced**: `write-guard.py` warns on hardcoded user-facing strings in `.tsx/.jsx` files.
 
 ### @shinkofa/types — Shared Types
 
@@ -178,7 +197,7 @@ Remaining integration work: replace coupled components in The Ermite and Michi-S
 
 ## Static Analysis Stack (BLOCKING)
 
-> Full details: `rules/Static-Analysis.md`. Templates: `templates/static-analysis/`.
+> Full details: `docs/Static-Analysis.md`. Templates: `templates/static-analysis/`.
 
 **Principle**: One linter is never enough. Each project type gets a standardized multi-tool stack with chiffered thresholds.
 
@@ -189,10 +208,75 @@ Remaining integration work: replace coupled components in The Ermite and Michi-S
 
 ## Maintainability (BLOCKING)
 
+**Principle: readability over size.** A file must be cohesive (one concept), decoupled (no hidden dependencies), and structured (short functions, clear naming). Size is a consequence of quality, not a goal.
+
 - Max 30 lines per function (excluding tests)
 - Cyclomatic complexity ≤ 10 per function
-- Max 300 lines per file
+- File length: WARNING at 300 lines, BLOCKING at 500 lines (code source only)
+- Exempt from file length: `.md`, `.json` (i18n), type schemas, configs
+- A 400-line file with CC 3 is better than a 200-line file with CC 15
 - No function with more than 4 parameters (use objects)
+
+## Observability Principles (BLOCKING)
+
+### Errors Are Data
+
+Every exception is debugging information. Swallowing it throws away the only clue.
+
+- `try/except/pass` (Python) or empty `catch {}` (TS) = BLOCKING on critical paths, WARNING elsewhere
+- Every caught exception must be logged at the appropriate level:
+
+| Category | Log level | Example |
+|----------|-----------|---------|
+| Critical path error | WARNING | DB connection failure caught by retry logic |
+| Expected fallback | DEBUG | Optional feature unavailable, using default |
+| User-triggered | INFO | Invalid input rejected by validation |
+
+### The Knob Footgun
+
+If a configuration option has only ONE correct value, it must be a constant, not a knob. Only expose settings where multiple values are legitimate.
+
+- Before adding any user-facing setting: "Can the user break the system by changing this?"
+- If yes → constant, not config
+- If multiple values are valid → expose with validation that rejects invalid values
+
+## Responsive Excellence (BLOCKING on public platforms)
+
+Desktop is not "mobile but wider." Each breakpoint earns its space.
+
+| Breakpoint | Principle | Implementation |
+|------------|-----------|----------------|
+| Mobile (375px+) | One column, one action. Touch-first. | Stack layout, 44x44px touch targets, bottom-nav |
+| Tablet (768px+) | Two columns where useful. Sidebar optional. | Adaptive grid, collapsible sidebar |
+| Desktop (1024px+) | Use the space intelligently. Zero dead margins. | Multi-column, data density increases, keyboard shortcuts |
+| Wide (1440px+) | Content stays readable. Max-width on prose. | max-width 75ch on text, side panels for metadata |
+
+**Rules**:
+- No "desktop = mobile stretched to 1440px" — that wastes screen real estate
+- Information density adapts to viewport: mobile shows summaries, desktop shows full data
+- Navigation adapts: bottom-nav on mobile, sidebar on desktop
+- Empty space must be intentional (breathing room), never accidental (forgot to fill)
+
+## Morphic Adaptation (BLOCKING on public platforms)
+
+Every public-facing Shinkofa platform adapts to the user's holistic profile. This is not personalization (cosmetic) — it is morphic adaptation (structural).
+
+| Layer | What adapts | Based on |
+|-------|------------|----------|
+| Sensory | Theme, contrast, motion, font size, density | User preferences + `prefers-*` media queries |
+| Cognitive | Information density, progressive disclosure, navigation depth | Neurodiversity profile (ND-friendly defaults) |
+| Temporal | Session length suggestions, break reminders, energy-aware scheduling | Energy cycles (Ki model) |
+| Content | Language, tone, examples, complexity level | Profile + interaction history |
+
+**Minimum viable adaptation** (day one):
+- Theme (dark/light/high-contrast) + reduced motion + font size
+- ND-friendly defaults (low cognitive load, predictable layout)
+- Language (FR/EN/ES with locale-aware formatting)
+
+**Full adaptation** (progressive):
+- Human Design profile integration (energy type, authority, strategy)
+- Sensory preferences (visual density, notification level, sound)
+- Learning style adaptation (visual/textual/interactive)
 
 ## Universal Project Checklist
 
@@ -200,7 +284,7 @@ Every Shinkofa project MUST have from day one:
 
 - [ ] Dark + light + high-contrast themes
 - [ ] `prefers-reduced-motion` support
-- [ ] Mobile-first (375px+)
+- [ ] Mobile-first (375px+) with responsive excellence per breakpoint
 - [ ] Trilingual FR/EN/ES (i18n from start)
 - [ ] Password field reveal toggle
 - [ ] Back-to-top button
@@ -208,6 +292,7 @@ Every Shinkofa project MUST have from day one:
 - [ ] Loading states (skeleton, not spinner)
 - [ ] Touch targets ≥ 44x44px on mobile
 - [ ] Feedback Widget integrated in main layout (WF-035)
+- [ ] Morphic adaptation: sensory defaults (theme + motion + font size)
 
 ## Pre-existing Errors
 

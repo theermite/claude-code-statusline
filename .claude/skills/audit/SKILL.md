@@ -40,11 +40,51 @@ When invoked with `--visibility`, run an extended visibility-specific audit:
 
 Output: scored checklist + prioritized action plan for magnetic visibility improvements.
 
+## Finding ID System
+
+Every finding gets a **domain prefix + sequential number** for commit-level traceability:
+
+| Prefix | Domain | Example |
+|--------|--------|---------|
+| S | Stability (threading, resource leaks, shutdown, error handling) | S1, S2... |
+| X | Security (network, crypto, input validation, secrets) | X1, X2... |
+| A | Architecture (modularity, God Objects, circular imports, coupling) | A1, A2... |
+| T | Tests (coverage gaps, empty tests, mock quality, flaky tests) | T1, T2... |
+| L | Low severity (cleanup, best practices, cosmetic) | L1, L2... |
+| P | Performance (CWV, bundle size, DB queries, caching) | P1, P2... |
+| V | Visibility (SEO, GEO, structured data, content gaps) | V1, V2... |
+
+**Usage**:
+- Audit output lists findings as `[S3] Race condition in WebSocket handler`
+- Commits reference finding ID: `fix(ws): add connection lock (S3)`
+- Remediation plan maps sprints to finding groups
+- Searchable in git history: `git log --grep="S3"`
+
+## Remediation Order
+
+Findings are prioritized by **logical dependency + user impact**, not audit weights:
+
+```
+1. STABILITY first  — can't fix anything if the app crashes
+2. SECURITY second  — can't trust results if data is compromised
+3. ARCHITECTURE     — can't maintain code if structure is broken
+4. TESTS            — can't verify fixes without reliable tests
+5. PERFORMANCE      — optimize only what's stable and secure
+6. QUALITY/LOW      — cleanup after foundations are solid
+```
+
+**Why this order?**
+- Dependency chain: can't write reliable tests if threading is broken
+- Risk mitigation: a crash destroys user trust faster than tech debt
+- Psychology: fixing CRITICAL bugs builds confidence; fixing lint feels like busywork
+
 ## Rules
 
 - Gate 7: Every finding verified via external source.
 - Score < 95% → correction plan required. No audit accepted below 95%.
 - Consult Eichi BEFORE web research for patterns and known issues.
 - Visibility audit: verify current SEO/GEO best practices via web before scoring.
+- Every finding MUST have a Finding ID. No untracked findings.
+- Remediation plan MUST follow the dependency order above. Justify any deviation.
 
 See `mnk/05-Workflows.md` WF-09 for full details.

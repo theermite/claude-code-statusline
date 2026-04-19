@@ -1,5 +1,18 @@
 # Conventions
 
+## Language
+
+| Context | Language | Examples |
+|---------|----------|----------|
+| Code (variables, functions, classes, comments) | English | `getUserProfile()`, `is_valid`, `AuthService` |
+| Documentation, interactions, content | French | Session reports, Obsidian notes, commit bodies |
+| Commit type/scope | English | `feat(auth):`, `fix(hooks):` |
+| Commit description | English or French | Both accepted |
+| i18n keys | English | `settings.password_change.title` |
+| i18n values | FR/EN/ES | Trilingual, FR = source of truth |
+
+AI-generated code quality is highest in English. Documentation and interactions stay in French — no impact on code quality, better for Jay's native thinking.
+
 ## Encoding
 
 UTF-8 without BOM. Always. French accents preserved in content. Hook-enforced.
@@ -34,7 +47,7 @@ type(scope): concise description
 
 Body if needed.
 
-Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Takumi "IA Dev Partner"
 ```
 
 Types: feat, fix, refactor, docs, chore, test, perf, ci, style

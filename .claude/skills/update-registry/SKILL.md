@@ -1,3 +1,9 @@
+---
+name: update-registry
+description: Regenerate Code Registry — auto-scan project source and generate structured inventory.
+model: sonnet
+---
+
 # /update-registry — Regenerate Code Registry
 
 > Auto-scan project source code via AST and generate a structured inventory of classes, methods, and functions.

@@ -1,3 +1,9 @@
+---
+name: pre-rag-audit
+description: Audit Knowledge Base before RAG indexation. Garbage in = garbage out.
+model: opus
+---
+
 # /pre-rag-audit — Audit Knowledge Base Before RAG Indexation
 
 > Audit a documentation corpus for coherence, duplicates, stale data, and exclusions BEFORE feeding it to a RAG pipeline. Garbage in = garbage out.

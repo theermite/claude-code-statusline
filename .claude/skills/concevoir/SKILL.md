@@ -13,7 +13,7 @@ Execute these steps IN ORDER. No skipping. Wait for Jay's validation at step 11.
 1. **BLUEPRINT DETECT**: Identify project type from signals (see `mnk/10-Blueprints.md`).
 2. **EICHI (our brain)**: Search Eichi-Shinkofa KB for ALL relevant domains — vision (MasterPlan), coaching, neurodiversity, marketing, gaming. Not just technical knowledge. Eichi IS our collective brain.
 3. **POUR QUOI (3 Layers)**: Define the WHY through all 3 layers: L3 — Does this serve Shinkofa's vision (invisible ecosystem respecting individuality)? L2 — How will this be PRESENTED to create magnetic visibility? L1 — What's the first step given current energy? All 3 must be documented.
-4. **RESEARCH + VEILLE**: Search in 8 languages (EN, FR, DE, RU, ES, ZH, JA, AR). State-of-art < 14 days. **CRITICAL**: Verify ALL technology recommendations, architecture patterns, and best practices via web. Training data is months stale — every recommendation based on stale knowledge costs time and money downstream.
+4. **RESEARCH + VEILLE**: Search in 7 languages (EN, FR, ZH, JA, KO, DE, RU). State-of-art < 14 days. **CRITICAL**: Verify ALL technology recommendations, architecture patterns, and best practices via web. Training data is months stale — every recommendation based on stale knowledge costs time and money downstream.
 5. **NON-TECH AGENTS**: Invoke UX, Brand, Pedagogy, Content, Gaming agents to review the concept.
 6. **BLUEPRINT**: Write or update `docs/Blueprint.md`.
 7. **CDC**: Write `docs/CDC.md` via interactive Q&A with Jay.
