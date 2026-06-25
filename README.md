@@ -26,7 +26,7 @@ Zero dependencies. Single file. Works on Windows, macOS, and Linux.
 ## What You Get
 
 | Line | Content |
-|------|---------|
+|------|---------| 
 | **1** | Model name, git branch (with dirty indicator), project name, session duration, lines changed |
 | **2** | Context window usage bar with color thresholds (green/yellow/red) + session cost |
 | **3** | Rate limit usage (5-hour and 7-day) with time until reset |
@@ -83,6 +83,11 @@ Want something simpler? `examples/minimal.mjs` is a stripped-down version with j
 ```
 [Claude Opus 4.6] [████████████░░░░░░░░] 58% | ~$1.24
 ```
+
+## Behavior & Edge Cases
+
+- **Timeout fallback**: if no data is received on stdin within **2 seconds**, the script outputs a placeholder (`[?] [░░░░░░░░░░░░░░░░░░░░] -`) and exits cleanly. This prevents the statusline from hanging on slow or misconfigured setups.
+- **Parse errors**: if the JSON from Claude Code is malformed, the same placeholder is shown — the script never crashes.
 
 ## Available Data
 
